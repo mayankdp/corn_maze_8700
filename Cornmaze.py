@@ -39,6 +39,8 @@ class Button():
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
 			print("Button Press!")
 			return True
+			
+			
 
 	def changeColor(self, position):
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
@@ -52,11 +54,14 @@ class Player(object):
  
     def move(self, dx, dy):
         if dx != 0:
+            print("inside move")
+            print(dx)
             self.move_single_axis(dx, 0)
         if dy != 0:
             self.move_single_axis(0, dy)
  
     def move_single_axis(self, dx, dy):
+        print("inside move single axis")
         self.rect.x += dx
         self.rect.y += dy
         self.collision(dx, dy)
@@ -83,10 +88,6 @@ os.environ["SDL_VIDEO_CENTERED"] = "1"
  
 clock = pygame.time.Clock()
 walls = []
-
-
-pumpkin=pygame.image.load("pumpkin.png")
-pumpkin=pygame.transform.scale(pumpkin,(22,22))
 
 # Holds the level layout in a list of strings.
 level = """
@@ -137,11 +138,16 @@ button_surface = pygame.transform.scale(button_surface, (300, 100))
 button = Button(button_surface, 400, 250, "START")
 button.update()
 button.changeColor(pygame.mouse.get_pos())
+pumpkin=pygame.image.load("pumpkin.png")
+pumpkin=pygame.transform.scale(pumpkin,(22,22))
+
+player = Player()
+
 
 click = False
 running = True
 while running:
-    
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -149,40 +155,38 @@ while running:
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             output=button.checkForInput(pygame.mouse.get_pos())
-            if output==True:
-                click = True
-                print(click)
-
-            if click:
+            if output == True:
                 screen.fill((0,0,0))
-                player = Player()
-                pygame.draw.rect(screen, (255, 200, 125), player.rect)
-                pygame.draw.rect(screen, (255, 0, 0), end_rect)
-                print("Hello")
-                key = pygame.key.get_pressed()
-                print(key)
-                print("Hi")
-                if key[pygame.K_LEFT]:
-                    print("key left")
-                    player.move(-2, 0)
-                if key[pygame.K_RIGHT]:
-                    player.move(2, 0)
-                if key[pygame.K_UP]:
-                    player.move(0, -2)
-                if key[pygame.K_DOWN]:
-                    player.move(0, 2)
- 
-                if player.rect.colliderect(end_rect):
-                    pygame.quit()
-                    sys.exit()
- 
                 for wall in walls:
-                    screen.blit(pumpkin,wall.rect)
-       
-                
-                
-                pygame.display.flip()
-                clock.tick(360)
+                     screen.blit(pumpkin,wall.rect)
+                     pygame.draw.rect(screen, (255, 200, 125), player.rect)
+                     pygame.draw.rect(screen, (255, 0, 0), end_rect)
+                     
+        pygame.draw.rect(screen, (255, 200, 125), player.rect)
+        pygame.draw.rect(screen, (255, 0, 0), end_rect)        
+        
+        if event.type == pygame.KEYDOWN:
+            print("Hi")
+            if event.key == pygame.K_LEFT:
+                print("key Left")
+                player.move(-2, 0)
+            if event.key == pygame.K_RIGHT:
+                player.move(2, 0)
+            if event.key == pygame.K_UP:
+                player.move(0, -2)
+            if event.key == pygame.K_DOWN:
+                player.move(0, 2)
+ 
+        if player.rect.colliderect(end_rect):
+            pygame.quit()
+            sys.exit()
+            
+        
+        
+
+        
+        pygame.display.flip()
+        clock.tick(360)
                 
         
         
