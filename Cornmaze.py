@@ -3,7 +3,7 @@
 """
 Created on Tue Nov 15 12:39:17 2022
 
-@author: sushmaamara
+@author: sushmaamara, Mayank, Parita, Mattia
 """
 
 import math
@@ -12,12 +12,13 @@ import os
 import pygame
 from pygame import mixer
 import sys
+from singleton import Singleton
 
 pygame.init()
 screen = pygame.display.set_mode((800, 500))
-background = pygame.image.load('background.png')
+background = pygame.image.load('Images/background.png')
 pygame.display.set_caption("Corn Maze")
-icon = pygame.image.load('icongame.ico')
+icon = pygame.image.load('Images/icongame.ico')
 pygame.display.set_icon(icon)
 main_font = pygame.font.SysFont("cambria", 50)
 
@@ -54,14 +55,14 @@ class Player(object):
  
     def move(self, dx, dy):
         if dx != 0:
-            print("inside move")
-            print(dx)
+            # print("inside move")
+            # print(dx)
             self.move_single_axis(dx, 0)
         if dy != 0:
             self.move_single_axis(0, dy)
  
     def move_single_axis(self, dx, dy):
-        print("inside move single axis")
+        # print("inside move single axis")
         self.rect.x += dx
         self.rect.y += dy
         self.collision(dx, dy)
@@ -93,29 +94,29 @@ walls = []
 level = """
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 W                                          W          
-W         WWWWWWWWWWWWWWWWWWWWW            W
-W   WWWW       W                           W
+W         WWWWWWWWWWWWWWWWWWWWW      www   W
+W   WWWW       W               wwww        W
 W   W          WWWWWWWWWWW                 W
-W WWW  WWWW        W                       W
-W   W     W W      W                       W
-W   W     W   WWW                          W
-W   WWW WWW   W W                          W
+W WWW  WWWW        W       wwww            W
+W   W     W W      W         wwww          W
+W   W     W   WWW   wwww    wwww           W
+W   WWW WWW   W W     wwww      wwww       W
 W     W   W   W W                          W
 WWW   W   WWWWW W                          W
 W W      WW                                W
-W W   WWWW   WWW                           W
+W W   WWWW   WWW  wwwwwwwww                W
 W     W    E   W                           W
+W     wwwwwwwww                            W
 W                                          W
 W                                          W
+W  wwwwwwwww                               W
+W                              wwwwwwwww   W
+W      wwwwwwwww                           W
+W           wwwwwwwww                      W
+W              wwwwwwwww                   W
 W                                          W
 W                                          W
-W                                          W
-W                                          W
-W                                          W
-W                                          W
-W                                          W
-W                                          W
-W                                          W
+W               wwwwwwwww                  W
 W                                          W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 """.splitlines()[1:]
@@ -127,18 +128,19 @@ for row in level:
         if col == "W":
             Wall((x, y))
         if col == "E":
-            end_rect = pygame.Rect(x, y, 10, 10)
+            end_rect = pygame.Rect(x, y, 15, 15)
         x += 18
     y += 18
     x = 1
 
 screen.blit(background,(0,0))
-button_surface = pygame.image.load("button.png")
-button_surface = pygame.transform.scale(button_surface, (300, 100))
-button = Button(button_surface, 400, 250, "START")
+singleton = Singleton.getInstance()
+singleton.button_surface = pygame.image.load("Images/button.png")
+singleton.button_surface = pygame.transform.scale(singleton.button_surface, (300, 100))
+button = Button(singleton.button_surface, 400, 250, "START")
 button.update()
 button.changeColor(pygame.mouse.get_pos())
-pumpkin=pygame.image.load("pumpkin.png")
+pumpkin=pygame.image.load("Images/pumpkin.png")
 pumpkin=pygame.transform.scale(pumpkin,(22,22))
 
 player = Player()
@@ -166,9 +168,9 @@ while running:
         pygame.draw.rect(screen, (255, 0, 0), end_rect)        
         
         if event.type == pygame.KEYDOWN:
-            print("Hi")
+            # print("Hi")
             if event.key == pygame.K_LEFT:
-                print("key Left")
+                # print("key Left")
                 player.move(-2, 0)
             if event.key == pygame.K_RIGHT:
                 player.move(2, 0)
