@@ -3,7 +3,7 @@
 """
 Created on Tue Nov 15 12:39:17 2022
 
-@author: sushmaamara, Mayank, Parita, Mattia
+@author: sushmaamara
 """
 
 import math
@@ -12,15 +12,18 @@ import os
 import pygame
 from pygame import mixer
 import sys
-from singleton import Singleton
+
+global welcomescreen
+welcomescreen = False
 
 pygame.init()
-screen = pygame.display.set_mode((800, 500))
-background = pygame.image.load('Images/background.png')
+screen = pygame.display.set_mode((798, 500))
+background = pygame.image.load('background.png')
 pygame.display.set_caption("Corn Maze")
-icon = pygame.image.load('Images/icongame.ico')
+icon = pygame.image.load('icongame.ico')
 pygame.display.set_icon(icon)
 main_font = pygame.font.SysFont("cambria", 50)
+screen.blit(background,(0,0))
 
 class Button():
 	def __init__(self, image, x_pos, y_pos, text_input):
@@ -37,32 +40,44 @@ class Button():
 		screen.blit(self.text, self.text_rect)
 
 	def checkForInput(self, position):
-		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
+		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom) and welcomescreen == True :
 			print("Button Press!")
-			return True
-			
-			
+			return True		
 
 	def changeColor(self, position):
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
 			self.text = main_font.render(self.text_input, True, "green")
 		else:
 			self.text = main_font.render(self.text_input, True, "white")
+
+
+        
+	
 class Player(object):
  
     def __init__(self):
-        self.rect = pygame.Rect(32, 32, 16, 16)
+        self.rect = pygame.Rect(30, 30, 20, 20)
  
     def move(self, dx, dy):
         if dx != 0:
-            # print("inside move")
-            # print(dx)
+            print("inside move")
+            print(dx)
             self.move_single_axis(dx, 0)
         if dy != 0:
             self.move_single_axis(0, dy)
+            
+        screen.fill((73,56,112))
+        for wall in walls:
+                screen.blit(pumpkin,wall.rect)
+                pygame.draw.rect(screen, (73,56,112), player.rect)
+                playerImg = pygame.image.load("marathon.png")
+                playerImg = pygame.transform.scale(playerImg, (38, 38))
+                screen.blit(playerImg, self.rect)
+                
+                pygame.draw.rect(screen, (255, 0, 0), end_rect)
  
     def move_single_axis(self, dx, dy):
-        # print("inside move single axis")
+        print("inside move single axis")
         self.rect.x += dx
         self.rect.y += dy
         self.collision(dx, dy)
@@ -90,35 +105,28 @@ os.environ["SDL_VIDEO_CENTERED"] = "1"
 clock = pygame.time.Clock()
 walls = []
 
+
+
+
 # Holds the level layout in a list of strings.
 level = """
-WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
-W                                          W          
-W         WWWWWWWWWWWWWWWWWWWWW      www   W
-W   WWWW       W               wwww        W
-W   W          WWWWWWWWWWW                 W
-W WWW  WWWW        W       wwww            W
-W   W     W W      W         wwww          W
-W   W     W   WWW   wwww    wwww           W
-W   WWW WWW   W W     wwww      wwww       W
-W     W   W   W W                          W
-WWW   W   WWWWW W                          W
-W W      WW                                W
-W W   WWWW   WWW  wwwwwwwww                W
-W     W    E   W                           W
-W     wwwwwwwww                            W
-W                                          W
-W                                          W
-W  wwwwwwwww                               W
-W                              wwwwwwwww   W
-W      wwwwwwwww                           W
-W           wwwwwwwww                      W
-W              wwwwwwwww                   W
-W                                          W
-W                                          W
-W               wwwwwwwww                  W
-W                                          W
-WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+WWWWWWWWWWWWWWWWWWWWWWWWWWW
+W                         W               
+W   WWWW  WWWWWWWWWW  WW  W    
+W   W             W       W       
+W   W          WWWWWWWWW  W           
+W  WW  WWWW        W   W  W    
+W   W     W W      W   W  W       
+W   W     W   WWW  W   W  W       
+W   WWW WWW   W W  W   W  W       
+W     W   W   W W      W  W         
+WWW   W   WWWWW W      W  W        
+W W      WW       WWWW    W        
+W W   WWWW   WWW          W       
+W              W  WWWWWWWWW        
+WWWWWW  WWWWWWWW          W
+W                       E W
+WWWWWWWWWWWWWWWWWWWWWWWWWWW                                      
 """.splitlines()[1:]
  
 # Parse the level string above. W = wall, E = exit
@@ -128,20 +136,21 @@ for row in level:
         if col == "W":
             Wall((x, y))
         if col == "E":
-            end_rect = pygame.Rect(x, y, 15, 15)
-        x += 18
-    y += 18
+            end_rect = pygame.Rect(x, y, 20, 20)
+        x += 30
+    y += 29
     x = 1
 
-screen.blit(background,(0,0))
-singleton = Singleton.getInstance()
-singleton.button_surface = pygame.image.load("Images/button.png")
-singleton.button_surface = pygame.transform.scale(singleton.button_surface, (300, 100))
-button = Button(singleton.button_surface, 400, 250, "START")
+
+button_surface = pygame.image.load("button.png")
+button_surface = pygame.transform.scale(button_surface, (300, 100))
+button = Button(button_surface, 400, 250, "START")
 button.update()
 button.changeColor(pygame.mouse.get_pos())
-pumpkin=pygame.image.load("Images/pumpkin.png")
-pumpkin=pygame.transform.scale(pumpkin,(22,22))
+welcomescreen = True
+
+pumpkin=pygame.image.load("pumpkin.png")
+pumpkin=pygame.transform.scale(pumpkin,(30,30))
 
 player = Player()
 
@@ -149,7 +158,7 @@ player = Player()
 click = False
 running = True
 while running:
-
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -158,26 +167,33 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             output=button.checkForInput(pygame.mouse.get_pos())
             if output == True:
-                screen.fill((0,0,0))
+                welcomescreen = False
+                newscreen = pygame.display.set_mode((800, 500))
+                screen.fill((73,56,112))
                 for wall in walls:
                      screen.blit(pumpkin,wall.rect)
-                     pygame.draw.rect(screen, (255, 200, 125), player.rect)
+                     #pygame.draw.rect(screen, (255, 200, 125), player.rect)
+                     pygame.draw.rect(screen, (73,56,112), player.rect)
+                     playerImg = pygame.image.load("marathon.png")
+                     playerImg = pygame.transform.scale(playerImg, (38, 38))
+                     screen.blit(playerImg, pygame.Rect(32, 32, 20, 20))
                      pygame.draw.rect(screen, (255, 0, 0), end_rect)
+                     mixer.init()
+                     mixer.music.load(r"background.wav")
+                     mixer.music.play()
                      
-        pygame.draw.rect(screen, (255, 200, 125), player.rect)
-        pygame.draw.rect(screen, (255, 0, 0), end_rect)        
         
         if event.type == pygame.KEYDOWN:
-            # print("Hi")
+            print("Hi")
             if event.key == pygame.K_LEFT:
-                # print("key Left")
-                player.move(-2, 0)
+                print("key Left")
+                player.move(-4, 0)
             if event.key == pygame.K_RIGHT:
-                player.move(2, 0)
+                player.move(4, 0)
             if event.key == pygame.K_UP:
-                player.move(0, -2)
+                player.move(0, -4)
             if event.key == pygame.K_DOWN:
-                player.move(0, 2)
+                player.move(0, 4)
  
         if player.rect.colliderect(end_rect):
             pygame.quit()
