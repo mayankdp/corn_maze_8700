@@ -16,14 +16,14 @@ class Screen():
 class Player(Screen):
 
     def player(self,playerX, playerY):
-        playerImg = pygame.image.load(r'/home/parita/Desktop/CPSC8700/#FinalProject/Images/marathon.png')
+        playerImg = pygame.image.load(r'Images/marathon.png')
         playerImg = pygame.transform.scale(playerImg, (40,40))
         Screen.screen.blit(playerImg, (playerX, playerY))
        
 class Maze(Screen):
  
     #def maze(self):
-        #background = pygame.image.load(r'/home/parita/Desktop/CPSC8700/#FinalProject/Images/background.png')
+        #background = pygame.image.load(r'Images/background.png')
         #walls.append(self)
         #self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
         #mazeX = 0
@@ -31,20 +31,22 @@ class Maze(Screen):
         #Screen.screen.blit(background, (0,0))
 
     def draw(self):
-        maze = [ 1,1,1,1,1,1,1,1,1,1,
-                1,0,0,0,0,0,0,0,0,1,
-                1,1,1,0,1,1,1,1,1,1,
-                1,0,0,0,1,1,1,1,0,1,
-                1,0,1,0,0,0,0,0,0,1,
-                1,0,0,1,1,1,1,1,0,1,
-                1,0,0,1,1,5,0,0,0,1,
-                1,1,0,0,0,0,1,1,0,1,
-                1,1,1,1,1,1,1,1,1,1,]
+        maze = [ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,
+                1,1,1,0,1,1,1,1,1,1,1,0,0,0,1,1,0,1,
+                1,0,0,0,1,1,1,1,0,1,1,1,1,1,1,1,0,1,
+                1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,
+                1,0,0,1,1,1,1,1,0,1,0,1,1,0,1,1,1,1,
+                1,0,0,1,1,0,0,0,0,1,0,1,1,0,0,0,0,1,
+                1,1,0,0,0,0,1,1,0,1,0,1,1,0,1,1,0,1,
+                1,1,0,1,0,0,1,0,1,1,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,1,0,0,0,1,0,0,0,0,0,5,1,
+                1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,]
         bx = 0
         by = 0
-        M = 10
-        N = 9
-        pumpkin=pygame.image.load(r"/home/parita/Desktop/CPSC8700/#FinalProject/Images/pumpkin.png")
+        M = 18
+        N = 11
+        pumpkin=pygame.image.load(r"Images/pumpkin.png")
         pumpkin=pygame.transform.scale(pumpkin,(44,44))
         for i in range(0,M*N):
             if maze[ bx + (by*M) ] == 1:
@@ -70,8 +72,8 @@ class Game(Player,Maze):
     def run(self):
         running = True
         #Background Sound
-        mixer.music.load(r"/home/parita/Desktop/CPSC8700/#FinalProject/Music/strangerthings.wav")
-        mixer.music.play(-1)
+        # mixer.music.load(r"/home/parita/Desktop/CPSC8700/#FinalProject/Music/strangerthings.wav")
+        # mixer.music.play(-1)
         playerX = 40
         playerY= 40
         playerX_change = 0
@@ -92,19 +94,19 @@ class Game(Player,Maze):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         #print("key Left")
-                        playerX_change = -0.1
+                        playerX_change = -1
                         playerY_change = 0
                         #Player.player.move(-2, 0)
                     if event.key == pygame.K_RIGHT:
                         #print("key Right")
-                        playerX_change = 0.1
+                        playerX_change = 1
                         playerY_change = 0
                     if event.key == pygame.K_UP:
-                        playerY_change = -0.1
+                        playerY_change = -1
                         playerX_change = 0
                         #Player.player.move(0, -2)
                     if event.key == pygame.K_DOWN:
-                        playerY_change = 0.1
+                        playerY_change = 1
                         playerX_change = 0
                     #Player.player.move(0, 2)
                     #print("key Down")

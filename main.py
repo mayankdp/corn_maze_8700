@@ -1,5 +1,6 @@
 import myversion as my
+from singleton import Singleton
 
-obj1 = my.Game()
-
-obj1.run()
+singleton = Singleton.getInstance()
+singleton.obj1 = my.Game()
+singleton.obj1.run()
