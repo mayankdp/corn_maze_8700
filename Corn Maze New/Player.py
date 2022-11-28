@@ -25,10 +25,50 @@ WWWWWW  WWWWWWWW          W
 W                       E W
 WWWWWWWWWWWWWWWWWWWWWWWWWWW                                      
 """.splitlines()[1:]
+    
+level2 = """
+WWWWWWWWWWWWWWWWWWWWWWWWWWW
+W                         W               
+W   WWWWWWWWWWW  WWWWWW   W    
+W   W             W       W       
+W   W          WWWWWWWWW  W           
+W  WWWWWWWW            W  W    
+W   W     W   WWWWWWW  W  W       
+W   W     W   W        W  W       
+W   WWW   W   W W      W  W       
+W     W   W   W W      W  W         
+WWW   W   W   W W      W  W        
+W W      WW       WWWW    W        
+W W   WWWWW   WWW         W       
+W              W  WWWWWWWWW        
+WWWWWWWWWWWWWWWW          W
+W                       E W
+WWWWWWWWWWWWWWWWWWWWWWWWWWW                                      
+""".splitlines()[1:]
+
+level3 = """
+WWWWWWWWWWWWWWWWWWWWWWWWWWW
+W   WWWWWWWW              W               
+W   WWWWWWWWWWW  WWWWWW   W    
+W   W             W       W       
+W   W          WWWWWWWWW  W           
+W  WWWWWWWW            W  W    
+W   W     W   WWWWWWW  W  W       
+W   W     W   W        W  W       
+W   WWW   W   W W      W  W       
+W     W   W   W W      W  W         
+WWW   W   W   W W      W  W        
+W W      WW       WWWW    W        
+W W   WWWWW   WWW         W       
+W              W  WWWWWWWWW        
+WWWWWWWWWWWWWWWW          W
+W                       E W
+WWWWWWWWWWWWWWWWWWWWWWWWWWW                                      
+""".splitlines()[1:]
 
 # Parse the level string above. W = wall, E = exit
 x = y = 1
-for row in level:
+for row in level3:
     for col in row:
         if col == "W":
             Wall((x, y))
@@ -44,8 +84,8 @@ class Player(object):
  
     def move(self, dx, dy):
         if dx != 0:
-            print("inside move")
-            print(dx)
+            # print("inside move")
+            # print(dx)
             self.move_single_axis(dx, 0)
         if dy != 0:
             self.move_single_axis(0, dy)
@@ -61,7 +101,7 @@ class Player(object):
                 pygame.draw.rect(screen, (255, 0, 0), end_rect)
  
     def move_single_axis(self, dx, dy):
-        print("inside move single axis")
+        # print("inside move single axis")
         self.rect.x += dx
         self.rect.y += dy
         self.collision(dx, dy)
