@@ -4,20 +4,24 @@ import os
 import pygame
 from pygame import mixer
 import sys
+#import Welcome
 
 class Screen():
     #Initialize python game
     pygame.init()
 
     #Create Screen
-    screen = pygame.display.set_mode((800,500))
-
+    screen = pygame.display.set_mode((800,800))
+    pygame.display.set_caption("Corn Maze")
+    icon = pygame.image.load(r'Images/icongame.ico')
+    pygame.display.set_icon(icon)
+    main_font = pygame.font.SysFont("cambria", 50)
 
 class Player(Screen):
 
     def player(self,playerX, playerY):
-        playerImg = pygame.image.load(r'/home/parita/Desktop/CPSC8700/#FinalProject/Images/marathon.png')
-        playerImg = pygame.transform.scale(playerImg, (40,40))
+        playerImg = pygame.image.load(r'Images/marathon.png')
+        #playerImg = pygame.transform.scale(playerImg, (44,44))
         Screen.screen.blit(playerImg, (playerX, playerY))
        
 class Maze(Screen):
@@ -30,34 +34,38 @@ class Maze(Screen):
         #mazeY = 0
         #Screen.screen.blit(background, (0,0))
 
+    tiles = [r"Images/empty.png", r"Images/pumpkin.png", r"Images/trophy.png"]
+    TileSize = 64
+    maze = [ [1,1,1,1,1,1,1,1,1,1],
+                [1,0,0,0,0,0,0,0,0,1],
+                [1,1,1,0,1,1,1,1,1,1],
+                [1,0,0,0,1,1,1,1,0,1],
+                [1,0,1,0,0,0,0,0,0,1],
+                [1,0,0,1,1,1,1,1,0,1],
+                [1,0,0,1,1,2,0,0,0,1],
+                [1,1,0,0,0,0,1,1,0,1],
+                [1,1,1,1,1,1,1,1,1,1]]
     def draw(self):
-        maze = [ 1,1,1,1,1,1,1,1,1,1,
-                1,0,0,0,0,0,0,0,0,1,
-                1,1,1,0,1,1,1,1,1,1,
-                1,0,0,0,1,1,1,1,0,1,
-                1,0,1,0,0,0,0,0,0,1,
-                1,0,0,1,1,1,1,1,0,1,
-                1,0,0,1,1,5,0,0,0,1,
-                1,1,0,0,0,0,1,1,0,1,
-                1,1,1,1,1,1,1,1,1,1,]
-        bx = 0
-        by = 0
-        M = 10
-        N = 9
-        pumpkin=pygame.image.load(r"/home/parita/Desktop/CPSC8700/#FinalProject/Images/pumpkin.png")
-        pumpkin=pygame.transform.scale(pumpkin,(44,44))
-        for i in range(0,M*N):
-            if maze[ bx + (by*M) ] == 1:
-                Screen.screen.blit(pumpkin,( bx * 44 , by * 44))
+        
+        #pumpkin=pygame.image.load(r"/home/parita/Desktop/CPSC8700/#FinalProject/Images/pumpkin.png")
+        #pumpkin=pygame.transform.scale(pumpkin,(64,64))
 
-            elif maze[ bx + (by*M) ] == 5:
-                end_rect = pygame.Rect(bx * 44 , by * 44, 40, 40)
-                pygame.draw.rect(Screen.screen, (255, 0, 0), end_rect)
-            bx = bx + 1
-            if bx > M-1:
-                bx = 0 
-                by = by + 1
-
+        for row in range(len(Maze.maze)):
+            for column in range(len(Maze.maze[row])):
+                x = column * Maze.TileSize
+                y = row * Maze.TileSize
+                tile = Maze.tiles[Maze.maze[row][column]]
+                tile_i = pygame.image.load(tile)
+                #if maze[row][column] == 1: tile_i=pygame.transform.scale(tile_i,(40,40))
+                Screen.screen.blit(tile_i, (x, y))
+        '''
+        for row in range(len(maze)):
+            for column in range(len(maze[row])):
+                x = column * TileSize
+                y = row * TileSize
+                tile = tiles[maze[row][column]]
+                Screen.screen.blit(pumpkin, (x, y))
+        '''
 class Game(Player,Maze):
     __instance = None
 
@@ -70,51 +78,65 @@ class Game(Player,Maze):
     def run(self):
         running = True
         #Background Sound
-        mixer.music.load(r"/home/parita/Desktop/CPSC8700/#FinalProject/Music/strangerthings.wav")
+        mixer.music.load(r"Music/strangerthings.wav")
         mixer.music.play(-1)
-        playerX = 40
-        playerY= 40
-        playerX_change = 0
-        playerY_change = 0
+        playerX = 64
+        playerY= 64
+
         while running:
-            Screen.screen.fill((73,56,112))
+            Screen.screen.fill((0,0,0))
             '''
             for wall in walls:
                 Screen.screen.blit(pumpkin,wall.rect)
                 Screen.screen.blit(playerImg)
                 pygame.draw.rect(screen, (255, 0, 0), end_rect)
             '''
+            #current = Maze.tiles[Maze.maze[1][1]]
             Maze.draw(self) 
-            Player.player(self,playerX, playerY)        
+            Player.player(self,playerX, playerY)    
+
             for event in pygame.event.get():
+                row = int(playerY / Maze.TileSize)
+                column = int(playerX / Maze.TileSize)
+                
                 if event.type == pygame.QUIT:
                     running = False 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         #print("key Left")
-                        playerX_change = -0.1
-                        playerY_change = 0
+                        column -= 1
                         #Player.player.move(-2, 0)
+
                     if event.key == pygame.K_RIGHT:
                         #print("key Right")
-                        playerX_change = 0.1
-                        playerY_change = 0
+                        column += 1
+
                     if event.key == pygame.K_UP:
-                        playerY_change = -0.1
-                        playerX_change = 0
+                        row = row - 1
                         #Player.player.move(0, -2)
+
                     if event.key == pygame.K_DOWN:
-                        playerY_change = 0.1
-                        playerX_change = 0
-                    #Player.player.move(0, 2)
-                    #print("key Down")
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN: 
-                        playerX_change = 0
-                        playerY_change = 0
-            playerX += playerX_change
-            playerY += playerY_change
+                        row += 1
+
+                current = Maze.tiles[Maze.maze[row][column]]
+                if current == r"Images/trophy.png":
+                    runnning = False
+                    white = (255, 255, 255)
+
+                    newScreen = pygame.display.set_mode((400, 400))
+                    newScreen.fill(white)
+                    pygame.display.set_caption('Game Over')
+                    font = pygame.font.Font('freesansbold.ttf', 32)
+                    text = font.render('Game Over: You won...!', True, (0, 255, 0), white)
+                    #Screen.screen = False
+                    newScreen.blit(text,(400,400))
+                    
+            if current == r'Images/empty.png':
+                playerY = row * 64
+                playerX = column*64
+
             Player.player(self,playerX,playerY)
+
             pygame.display.flip()
             pygame.display.update()  
 
