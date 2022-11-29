@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import string
 
 class Pattern:
 
@@ -33,19 +32,19 @@ class Two(Pattern):
         return """
 WWWWWWWWWWWWWWWWWWWWWWWWWWW
 W                         W               
-W   WWWWWWW      WWWWWW   W    
+W   WWWWWWW    WWWWWWWW   W    
 W   W             W       W       
 W   W    WWWW  WWWWWWWWW  W           
-W  WW                  W  W    
+W  WWWW                W  W    
 W   W     W   WWWWWWW  W  W       
-W   W     W   W        W  W       
-W   WWW   W   W        W  W       
-W     W   W   W        W  W         
+W   W   WWW   W        W  W       
+W   WWW   WWWWWW       W  W       
+W     W   W   W   WWWWWW  W         
 WWW   W   W   W        W  W        
 W W      WW       WWWW    W        
 W W   WWWWW   WWW         W       
 W              W  WWWWWWWWW        
-WWWWWWWWWWW               W
+WWWWWWWWWWW   WWWWWW      W
 W                       E W
 WWWWWWWWWWWWWWWWWWWWWWWWWWW                                      
 """.splitlines()[1:]
@@ -55,17 +54,17 @@ class Three(Pattern):
         return """
 WWWWWWWWWWWWWWWWWWWWWWWWWWW
 W   WWWWWWWW              W               
-W   WWWWWWWWWWW  WWWWWW   W    
-W   W             W       W       
+W            WW  WWWWWW   W    
+WW  WWWWWWW       W       W       
 W   W          WWWWWWWWW  W           
-W  WWWWWWWWWWWWWWW     W  W    
+W  WWWW  WWW     W     W  W    
 W   W     W   WWWWWWW  W  W       
 W   W     W   W        W  W       
-W   WWW   W   W W      W  W       
+W   WWW   W   W W   WWWW  W       
 W     W   W   W W      W  W         
 WWW   W   W   W W      W  W        
 W W      WW       WWWW    W        
-W W   WWWWWW  WWW         W       
+W WWWW  WWWW  WWW         W       
 W              W  WWWWWWWWW        
 WWWWWWWWWWWWWWWW  W       W
 W          W            E W

@@ -59,61 +59,6 @@ class Button():
 		else:
 			self.text = main_font.render(self.text_input, True, (255, 255, 255))
 
-class GameState():
-    def __init__(self):
-        self.state = 'main_game'
-
-    def main_game(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                output=button.checkForInput(pygame.mouse.get_pos())
-                if output == True:
-                    welcomescreen = False
-                    newscreen = pygame.display.set_mode((800, 500))
-                    screen.fill((73,56,112))
-                    for wall in walls:
-                        screen.blit(pumpkin,wall.rect)
-                        #pygame.draw.rect(screen, (255, 200, 125), player.rect)
-                        pygame.draw.rect(screen, (73,56,112), singleton.player.rect)
-                        playerImg = pygame.image.load("Images/marathon.png")
-                        playerImg = pygame.transform.scale(playerImg, (38, 38))
-                        screen.blit(playerImg, pygame.Rect(32, 32, 20, 20))
-                        
-                        pygame.draw.rect(screen, (73,56,112), end_rect)
-                        houseImg = pygame.image.load("Images/house.png")
-                        houseImg = pygame.transform.scale(houseImg, (38, 38))
-                        screen.blit(houseImg, end_rect)
-
-                        mixer.init()
-                        mixer.music.load(r"Music/background.wav")
-                        mixer.music.play(loops=-1)
-                        
-            
-            if event.type == pygame.KEYDOWN:
-                # print("Hi")
-                if event.key == pygame.K_LEFT:
-                    # print("key Left")
-                    singleton.player.move(-10, 0)
-                if event.key == pygame.K_RIGHT:
-                    singleton.player.move(10, 0)
-                if event.key == pygame.K_UP:
-                    singleton.player.move(0, -10)
-                if event.key == pygame.K_DOWN:
-                    singleton.player.move(0, 10)
-    
-            if singleton.player.rect.colliderect(end_rect):
-                Tk().wm_withdraw() #to hide the main window
-                messagebox.showinfo('Continue','OK')
-                pygame.quit()
-                sys.exit()
-
-        pygame.display.flip()
-        clock.tick(360)
-
 os.environ["SDL_VIDEO_CENTERED"] = "1"
  
 clock = pygame.time.Clock()
@@ -129,9 +74,60 @@ welcomescreen = True
 singleton = Singleton.getInstance()
 singleton.player = Player()
 
-
 click = False
 running = True
-game = GameState()
 while running:
-    game.main_game()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            output=button.checkForInput(pygame.mouse.get_pos())
+            if output == True:
+                welcomescreen = False
+                newscreen = pygame.display.set_mode((800, 500))
+                screen.fill((73,56,112))
+                for wall in walls:
+                    screen.blit(pumpkin,wall.rect)
+                    #pygame.draw.rect(screen, (255, 200, 125), player.rect)
+                    pygame.draw.rect(screen, (73,56,112), singleton.player.rect)
+                    playerImg = pygame.image.load("Images/marathon.png")
+                    playerImg = pygame.transform.scale(playerImg, (38, 38))
+                    screen.blit(playerImg, pygame.Rect(32, 32, 20, 20))
+                    
+                    pygame.draw.rect(screen, (73,56,112), end_rect)
+                    houseImg = pygame.image.load("Images/house.png")
+                    houseImg = pygame.transform.scale(houseImg, (38, 38))
+                    screen.blit(houseImg, end_rect)
+
+                    mixer.init()
+                    mixer.music.load(r"Music/background.wav")
+                    mixer.music.play(loops=-1)          
+        
+        if event.type == pygame.KEYDOWN:
+            # print("Hi")
+            if event.key == pygame.K_LEFT:
+                # print("key Left")
+                singleton.player.move(-10, 0)
+            if event.key == pygame.K_RIGHT:
+                singleton.player.move(10, 0)
+            if event.key == pygame.K_UP:
+                singleton.player.move(0, -10)
+            if event.key == pygame.K_DOWN:
+                singleton.player.move(0, 10)
+
+        if singleton.player.rect.colliderect(end_rect):
+            white = (255, 255, 255)
+            newScreen = pygame.display.set_mode((300, 300))
+            newScreen.fill(white)
+            pygame.display.set_caption('Game Over')
+            font = pygame.font.Font('freesansbold.ttf', 20)
+            text = font.render('Game Over: You won...!', True, (0, 255, 0), white)
+            newScreen.blit(text,(40,40))
+            trophy = pygame.image.load('Images/trophy.png')
+            trophy = pygame.transform.scale(trophy, (100, 100))
+            newScreen.blit(trophy, pygame.Rect(100, 100, 100, 100))
+
+    pygame.display.flip()
+    clock.tick(360)
