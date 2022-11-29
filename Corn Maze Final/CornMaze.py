@@ -82,7 +82,12 @@ class GameState():
                         playerImg = pygame.image.load("Images/marathon.png")
                         playerImg = pygame.transform.scale(playerImg, (38, 38))
                         screen.blit(playerImg, pygame.Rect(32, 32, 20, 20))
-                        pygame.draw.rect(screen, (255, 255, 255), end_rect)
+                        
+                        pygame.draw.rect(screen, (73,56,112), end_rect)
+                        houseImg = pygame.image.load("Images/house.png")
+                        houseImg = pygame.transform.scale(houseImg, (38, 38))
+                        screen.blit(houseImg, end_rect)
+
                         mixer.init()
                         mixer.music.load(r"Music/background.wav")
                         mixer.music.play(loops=-1)

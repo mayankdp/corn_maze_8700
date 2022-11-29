@@ -47,8 +47,11 @@ class Player(object):
                 playerImg = pygame.transform.scale(playerImg, (38, 38))
                 screen.blit(playerImg, self.rect)
                 
-                pygame.draw.rect(screen, (255, 0, 0), end_rect)
- 
+                pygame.draw.rect(screen, (73,56,112), end_rect)
+                houseImg = pygame.image.load("Images/house.png")
+                houseImg = pygame.transform.scale(houseImg, (38, 38))
+                screen.blit(houseImg, end_rect)
+
     def move_single_axis(self, dx, dy):
         # print("inside move single axis")
         self.rect.x += dx
